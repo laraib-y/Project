@@ -3,6 +3,17 @@ import tkinter as tk
 import tkinter.filedialog as fd
 import tkinter.font as font
 
+# Create a class BMP 
+class BMP: 
+
+    # Create a constructor, __init__
+    def __init__(self, file_path):
+
+        # Create a window by initializing to root and create the title 
+        self.root = root
+        self.root.title("BMP Image Viewer and Editor")
+
+"""""
 # Create a browse file function to open the files
 def browse_file():
     file_path = fd.askopenfilename()
@@ -29,4 +40,8 @@ file_path_entry.grid(row = 1, column = 0, padx = 10, pady = 5, sticky = "ew")
 # Create a browse button to find the desired file 
 tk.Button(root, text="Browse", command=browse_file).grid(row=1, column=1, padx = 5, pady = 5)
 
-root.mainloop()
+"""
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = BMP(root)
+    root.mainloop()
