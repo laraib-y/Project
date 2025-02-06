@@ -13,6 +13,30 @@ class BMP:
         self.root = root
         self.root.title("BMP Image Viewer and Editor")
 
+        # Create a title for the GUI by createing a font for the title and adding it to the to center of the GUI 
+        title_font = font.Font(family = "Times New Roman", size = 14, weight = "bold") 
+        tk.Label(root, text = "BMP Image Viewer and Editor:", font = title_font).grid(row = 0, column = 0, columnspan = 2, pady = 10, padx = 5)
+
+        # Create a file entry so that the user can choose thier file or input it manually 
+        # Use sticky = ew to expand the entry when the window is resized
+        self.root.file_path_entry = tk.Entry(root, width = 50)
+        self.root.file_path_entry.grid(row = 1, column = 0, padx = 10, pady = 5, sticky = "ew")
+
+        # Create a browse button so that the user can open file explorer on their computer 
+        tk.Button(root, text = "Browse", command = self.browse_file).grid(row =1, column = 1, padx = 5, pady = 5)
+
+
+    # Create a function to browse the file 
+    def browse_file(self):
+
+        # Open the file explorer and get the file path, restrict it so that only BMP files are selected 
+        file_path = fd.askopenfilename(filetypes=[("BMP files", "*.bmp")])
+
+        # If a BMP file is selected, delete and existing characters into the file entry and inser the file path obtained
+        if file_path:
+            self.root.file_path_entry.delete(0, tk.END)
+            self.root.file_path_entry.insert(0, file_path)
+
 """""
 # Create a browse file function to open the files
 def browse_file():
