@@ -2,6 +2,7 @@
 import tkinter as tk 
 import tkinter.filedialog as fd
 import tkinter.font as font
+from  PIL import Image, ImageTk
 
 # Create a class BMP 
 class BMP: 
@@ -14,11 +15,26 @@ class BMP:
 
         # If a BMP file is selected, delete and existing characters into the file entry and inser the file path obtained
         if file_path:
-            self.root.file_path_entry.delete(0, tk.END)
-            self.root.file_path_entry.insert(0, file_path)
+            self.file_path_entry.delete(0, tk.END)
+            self.file_path_entry.insert(0, file_path)
+            
+            # load the image
+            self.load_image(file_path)
+
+
+    # Create a function to help load and display the image
+    def load_image( self,file_path):
+
+        # Open the image via the file path and resize to 300x300 pixels
+        self.image = Image.open(file_path)
+        self.image = self.image.resize((300, 300))  
+        
+        # Convert for tkinter and update the label to show the image
+        self.tk_image = ImageTk.PhotoImage(self.image)
+        self.image_viewer.config(image=self.tk_image, text="")  
 
     # Create a constructor, __init__
-    def __init__(self, file_path):
+    def __init__(self, root):
 
         # Create a window by initializing to root and create the title 
         self.root = root
@@ -30,15 +46,24 @@ class BMP:
 
         # Create a file entry so that the user can choose thier file or input it manually 
         # Use sticky = ew to expand the entry when the window is resized
-        self.root.file_path_entry = tk.Entry(root, width = 50)
-        self.root.file_path_entry.grid(row = 1, column = 0, padx = 10, pady = 5, sticky = "ew")
+        self.file_path_entry = tk.Entry(root, width = 50)
+        self.file_path_entry.grid(row = 1, column = 0, padx = 10, pady = 5, sticky = "ew")
 
         # Create a browse button so that the user can open file explorer on their computer 
         tk.Button(root, text = "Browse", command = self.browse_file).grid(row =1, column = 1, padx = 5, pady = 5)
 
         # Create an image viewer so that the user can see the image they have selected
-        self.image_viewer = tk.Label(root, text = "Image Viewer",bg = "white", width = 50, height = 20)
+        self.image_viewer = tk.Label(root, text = "Image Viewer",bg = "lightgrey")
         self.image_viewer.grid(row = 2, column = 0, columnspan = 2, padx = 10, pady = 5)
+
+        # Create RGB buttons
+
+        # Create sliders for brightness 
+
+        # Create sliders for scale 
+        
+
+
 """""
 # Create a browse file function to open the files
 def browse_file():
