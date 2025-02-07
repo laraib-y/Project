@@ -6,6 +6,17 @@ import tkinter.font as font
 # Create a class BMP 
 class BMP: 
 
+    # Create a function to browse the file 
+    def browse_file(self):
+
+        # Open the file explorer and get the file path, restrict it so that only BMP files are selected 
+        file_path = fd.askopenfilename(filetypes=[("BMP files", "*.bmp")])
+
+        # If a BMP file is selected, delete and existing characters into the file entry and inser the file path obtained
+        if file_path:
+            self.root.file_path_entry.delete(0, tk.END)
+            self.root.file_path_entry.insert(0, file_path)
+
     # Create a constructor, __init__
     def __init__(self, file_path):
 
@@ -25,18 +36,9 @@ class BMP:
         # Create a browse button so that the user can open file explorer on their computer 
         tk.Button(root, text = "Browse", command = self.browse_file).grid(row =1, column = 1, padx = 5, pady = 5)
 
-
-    # Create a function to browse the file 
-    def browse_file(self):
-
-        # Open the file explorer and get the file path, restrict it so that only BMP files are selected 
-        file_path = fd.askopenfilename(filetypes=[("BMP files", "*.bmp")])
-
-        # If a BMP file is selected, delete and existing characters into the file entry and inser the file path obtained
-        if file_path:
-            self.root.file_path_entry.delete(0, tk.END)
-            self.root.file_path_entry.insert(0, file_path)
-
+        # Create an image viewer so that the user can see the image they have selected
+        self.image_viewer = tk.Label(root, text = "Image Viewer",bg = "white", width = 50, height = 20)
+        self.image_viewer.grid(row = 2, column = 0, columnspan = 2, padx = 10, pady = 5)
 """""
 # Create a browse file function to open the files
 def browse_file():
