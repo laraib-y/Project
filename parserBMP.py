@@ -3,7 +3,7 @@ import tkinter as tk
 import tkinter.filedialog as fd
 import tkinter.font as font
 
-def bmp_parser(self, file_path):
+def bmp_parser(file_path):
     # Read the BMP file into an array of bytes
     with open(file_path, "rb") as file:
         bmp = file.read()

@@ -26,8 +26,7 @@ class BMP:
             self.metadata = parser.bmp_parser(file_path)
             
             # Display the metadata as a GUI 
-            # self.display_metadata()
-
+            self.display_metadata()
 
     # Create a function to help load and display the image
     def load_image( self,file_path):
@@ -39,6 +38,16 @@ class BMP:
         # Convert for tkinter and update the label to show the image
         self.tk_image = ImageTk.PhotoImage(self.image)
         self.image_viewer.config(image=self.tk_image, text="")  
+
+    # Create a function to help display the metadata in the GUI 
+    def display_metadata(self):
+
+        # Use hasattr toq check if the metadata exists and if it does, display it in the GUI
+        if hasattr(self, 'metadata'):
+            for key, value in self.metadata.items():
+                if key in self.metadata_gui:
+                    self.metadata_gui[key].config(text=f"{key}: {value}")
+
 
     # Create a constructor, __init__
     def __init__(self, root):
