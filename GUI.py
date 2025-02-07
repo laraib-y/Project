@@ -44,9 +44,53 @@ class BMP:
 
         # Use hasattr toq check if the metadata exists and if it does, display it in the GUI
         if hasattr(self, 'metadata'):
+
+            # For each metadata key and value, display it in the GUI
             for key, value in self.metadata.items():
                 if key in self.metadata_gui:
                     self.metadata_gui[key].config(text=f"{key}: {value}")
+
+    # Create a function to toggle the RGB values 
+    def rgb_changer (self):
+
+        # Check to see if the image has loaded. 
+        if self.image is None: 
+            return 
+            
+        # Get the width and height of the original image
+        width, height = self.image.size
+
+        # Load the pixels from the original image, which will be looped through to create a new image 
+        original_image = self.image.load()
+
+        # Create a new image with the same width and height as the original image
+        new_image = Image.new("RGB", (width, height))
+
+        # Loop through all the pixels in the original image
+        for y in range(height):
+            for x in range(width):
+                r, g, b = original_image[x, y]
+
+                # Check to see if there is red in the pixel and if the red button is toggled
+                if not self.red_button.get():
+                    r = 0
+
+                # Check to see if there is green in the pixel and if the green button is toggled
+                if not self.green_button.get():
+                    g = 0
+
+                # Check to see if there is blue in the pixel and if the blue button is toggled 
+                if not self.blue_button.get():
+                    b = 0
+
+                # Put the acquired pixels in the new image 
+                new_image.putpixel((x, y), (r, g, b))
+
+        # Conver the new image into tkinter fornat and update it to the GUI 
+        self.tk_image = ImageTk.PhotoImage(new_image)
+        self.image_viewer.config(image=self.tk_image)
+
+        self.root.update()
 
 
     # Create a constructor, __init__
@@ -87,7 +131,16 @@ class BMP:
             label.grid(row = row, column = 0, sticky = "w", padx = 10)
             row = row + 1
 
-        # Create RGB buttons
+       # Create RGB toggle buttons and initialize to true. Once the button is pressed, the rgb_changer function will be called
+        self.red_button = tk.BooleanVar(value=True)
+        self.green_button = tk.BooleanVar(value=True)
+        self.blue_button = tk.BooleanVar(value=True)
+
+        tk.Checkbutton(root, text="Red", variable=self.red_button, command=self.rgb_changer).grid(row=10, column=0, sticky="w")
+        tk.Checkbutton(root, text="Green", variable=self.green_button, command=self.rgb_changer).grid(row=11, column=0, sticky="w")
+        tk.Checkbutton(root, text="Blue", variable=self.blue_button, command=self.rgb_changer).grid(row=12, column=0, sticky="w")
+
+
 
         # Create sliders for brightness 
 
