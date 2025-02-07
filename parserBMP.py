@@ -24,8 +24,8 @@ def bmp_parser(self, file_path):
     # 5. Get the number of bits per pixel (2 bytes and in between 28-30 bytes)  
     bits_per_pixel = int.from_bytes(bmp[28:30], "little")
 
-    # Create a dictionary for the meta data 
-    self.metadata = {
+    # Create a dictionary for the meta data and return 
+    return {
         "Signature": signature,
         "File Size": file_size,
         "Width": width,

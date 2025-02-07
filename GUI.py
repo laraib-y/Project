@@ -3,6 +3,7 @@ import tkinter as tk
 import tkinter.filedialog as fd
 import tkinter.font as font
 from  PIL import Image, ImageTk
+import parserBMP as parser
 
 # Create a class BMP 
 class BMP: 
@@ -20,6 +21,12 @@ class BMP:
             
             # load the image
             self.load_image(file_path)
+
+            # Parse the BMP file 
+            self.metadata = parser.bmp_parser(file_path)
+            
+            # Display the metadata as a GUI 
+            # self.display_metadata()
 
 
     # Create a function to help load and display the image
@@ -56,42 +63,27 @@ class BMP:
         self.image_viewer = tk.Label(root, text = "Image Viewer",bg = "lightgrey")
         self.image_viewer.grid(row = 2, column = 0, columnspan = 2, padx = 10, pady = 5)
 
+        # Create each value in the metadata dictionary into a label 
+        self.metadata_gui = {
+            "Signature": tk.Label(root, text = "Signature: "),
+            "File Size": tk.Label(root, text = "File Size: "),
+            "Width": tk.Label(root, text = "Width: "),
+            "Height": tk.Label(root, text = "Height: "),
+            "Bits per Pixel": tk.Label(root, text = "Bits per Pixel: ")
+        }
+
+        # Display each label and its corresponding value in the GUI
+        row = 3
+        for key, label in self.metadata_gui.items():
+            label.grid(row = row, column = 0, sticky = "w", padx = 10)
+            row = row + 1
+
         # Create RGB buttons
 
         # Create sliders for brightness 
 
         # Create sliders for scale 
-        
-
-
-"""""
-# Create a browse file function to open the files
-def browse_file():
-    file_path = fd.askopenfilename()
-    file_path_entry.delete(0, tk.END) # delete any current text in Entry
-    file_path_entry.insert(0, file_path) # insert the path to the file in Entry 
     
-root = tk.Tk() # Create a root window
-root.title("BMP Image Viewer and Editor") # Title of the GUI
-
-# Add padding to the grid
-root.columnconfigure(0, weight=3)  # Entry takes more space
-root.columnconfigure(1, weight=1)  # Button takes less space
-root.rowconfigure(1, weight=1)  # Row expands when resized
-
-title_font = font.Font(family = "Times New Roman", size = 14, weight = "bold") # Set the font size of the GUI
-
-# Create a label for the GUI to show the user what this program is for 
-tk.Label(root, text="BMP Image Viewer and Editor:", font = title_font).grid(row = 0, column = 0, columnspan=2, pady = 10)    
-
-# Create a file entry 
-file_path_entry = tk.Entry(root, width=50)
-file_path_entry.grid(row = 1, column = 0, padx = 10, pady = 5, sticky = "ew")
-
-# Create a browse button to find the desired file 
-tk.Button(root, text="Browse", command=browse_file).grid(row=1, column=1, padx = 5, pady = 5)
-
-"""
 if __name__ == "__main__":
     root = tk.Tk()
     app = BMP(root)
