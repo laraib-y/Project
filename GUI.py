@@ -19,8 +19,13 @@ class BMP:
             self.file_path_entry.delete(0, tk.END)
             self.file_path_entry.insert(0, file_path)
             
-            # load the image
-            self.load_image(file_path)
+            # Keep an original copy of the image and load the image 
+            self.original_image = Image.open(file_path).convert("RGB")
+            self.image = self.original_image.copy()
+
+            self.image = self.image.resize((300, 300))  
+            self.tk_image = ImageTk.PhotoImage(self.image)
+            self.image_viewer.config(image=self.tk_image)
 
             # Parse the BMP file 
             self.metadata = parser.bmp_parser(file_path)
@@ -33,11 +38,11 @@ class BMP:
 
         # Open the image via the file path and resize to 300x300 pixels
         self.image = Image.open(file_path)
-        self.image = self.image.resize((300, 300))  
+        self.image = self.image.resize((300, 300)).convert("RGB")  
         
         # Convert for tkinter and update the label to show the image
         self.tk_image = ImageTk.PhotoImage(self.image)
-        self.image_viewer.config(image=self.tk_image, text="")  
+        self.image_viewer.config(image=self.tk_image)  
 
     # Create a function to help display the metadata in the GUI 
     def display_metadata(self):
@@ -60,16 +65,13 @@ class BMP:
         # Get the width and height of the original image
         width, height = self.image.size
 
-        # Load the pixels from the original image, which will be looped through to create a new image 
-        original_image = self.image.load()
-
         # Create a new image with the same width and height as the original image
         new_image = Image.new("RGB", (width, height))
 
         # Loop through all the pixels in the original image
         for y in range(height):
             for x in range(width):
-                r, g, b = original_image[x, y]
+                r, g, b = self.image.getpixel((x, y))
 
                 # Check to see if there is red in the pixel and if the red button is toggled
                 if not self.red_button.get():
@@ -136,9 +138,10 @@ class BMP:
         self.green_button = tk.BooleanVar(value=True)
         self.blue_button = tk.BooleanVar(value=True)
 
-        tk.Checkbutton(root, text="Red", variable=self.red_button, command=self.rgb_changer).grid(row=10, column=0, sticky="w")
-        tk.Checkbutton(root, text="Green", variable=self.green_button, command=self.rgb_changer).grid(row=11, column=0, sticky="w")
-        tk.Checkbutton(root, text="Blue", variable=self.blue_button, command=self.rgb_changer).grid(row=12, column=0, sticky="w")
+        # Create a Checkbutton for each colour so that the image can revert to the original state if needed
+        tk.Checkbutton(root, text="R", bg = "red", variable=self.red_button, command=self.rgb_changer).grid(row=3, column=1)
+        tk.Checkbutton(root, text="G", bg = "green", variable=self.green_button, command=self.rgb_changer).grid(row=4, column=1)
+        tk.Checkbutton(root, text="B", bg = "#1247D3", variable=self.blue_button, command=self.rgb_changer).grid(row=5, column=1)
 
 
 
