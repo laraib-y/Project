@@ -2,7 +2,7 @@
 import tkinter as tk 
 import tkinter.filedialog as fd
 import tkinter.font as font
-from  PIL import Image, ImageTk
+from  PIL import Image, ImageTk, ImageEnhance
 import parserBMP as parser
 
 # Create a class BMP 
@@ -94,6 +94,20 @@ class BMP:
 
         self.root.update()
 
+    def change_brightness(self, value):
+        if self.original_image is None:
+            return  
+
+        brightness_factor = int(value) / 100  # Convert slider value (0-100) to a multiplier
+        enhancer = ImageEnhance.Brightness(self.original_image)  # Create a brightness enhancer
+        brightened_image = enhancer.enhance(brightness_factor)  # Adjust brightness
+
+        # Ensure the image maintains the correct size
+        brightened_image = brightened_image.resize(self.image.size)
+
+        # Update the GUI image
+        self.tk_image = ImageTk.PhotoImage(brightened_image)
+        self.image_viewer.config(image=self.tk_image)
 
     # Create a constructor, __init__
     def __init__(self, root):
@@ -101,6 +115,9 @@ class BMP:
         # Create a window by initializing to root and create the title 
         self.root = root
         self.root.title("BMP Image Viewer and Editor")
+
+        self.image = None
+        self.original_image = None
 
         # Create a title for the GUI by createing a font for the title and adding it to the to center of the GUI 
         title_font = font.Font(family = "Times New Roman", size = 14, weight = "bold") 
@@ -143,9 +160,12 @@ class BMP:
         tk.Checkbutton(root, text="G", bg = "green", variable=self.green_button, command=self.rgb_changer).grid(row=4, column=1)
         tk.Checkbutton(root, text="B", bg = "#1247D3", variable=self.blue_button, command=self.rgb_changer).grid(row=5, column=1)
 
-
-
         # Create sliders for brightness 
+        self.brightness = tk.Scale(root, from_=0, to=100, orient=tk.HORIZONTAL, label="Brightness", command=self.change_brightness)
+        self.brightness.grid(row = 6, column = 1, columnspan = 2, pady = 5)
+
+        # Set the default brightness to 100
+        self.brightness.set(100)
 
         # Create sliders for scale 
     
